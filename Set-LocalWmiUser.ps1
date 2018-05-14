@@ -6,7 +6,7 @@
 
 # Example: Set-LocalWmiUser add domain\user 
 
-Param ( [parameter(Mandatory=$true,Position=0)][string] $operation,  [parameter(Mandatory=$true,Position=2)][string] $account, [bool] $allowInherit = $false, [bool] $deny = $false, [string] $computerName = ".", [System.Management.Automation.PSCredential] $credential = $null)
+Param ( [parameter(Mandatory=$true,Position=0)][string] $operation,  [parameter(Mandatory=$true,Position=2)][string] $account, [bool] $allowInherit = $true, [bool] $deny = $false, [string] $computerName = ".", [System.Management.Automation.PSCredential] $credential = $null)
 
 Process {
 
@@ -77,8 +77,6 @@ Process {
  
     $acl = $output.Descriptor
 
-    $OBJECT_INHERIT_ACE_FLAG = 0x1
-
     $CONTAINER_INHERIT_ACE_FLAG = 0x2
 
     $computerName = (Get-WmiObject @remoteparams Win32_ComputerSystem).Name
@@ -126,7 +124,7 @@ Process {
 
             if ($allowInherit) {
 
-                $ace.AceFlags = $OBJECT_INHERIT_ACE_FLAG + $CONTAINER_INHERIT_ACE_FLAG
+                $ace.AceFlags = $CONTAINER_INHERIT_ACE_FLAG
 
             } else {
 
